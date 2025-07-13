@@ -11,5 +11,5 @@ panos.iso: panos.bin
 	cp panos.bin isodir/boot/panos.bin
 	grub-mkrescue -o panos.iso isodir
 clean:
-	rm -Rf *.bin *.o *.bin *.iso isodir/boot/*.bin
+	rm -Rf *.bin *.o *.bin *.iso isodir/boot/*.bin drivers/*.o libs/*.o
 .PHONY: all clean
