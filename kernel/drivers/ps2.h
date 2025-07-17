@@ -1,4 +1,5 @@
 #ifndef PS2_H
 #define PS2_H
-void ps2();
+int ps2_keyboard_scan();
+char ps2_keyboard_input();
 #endif

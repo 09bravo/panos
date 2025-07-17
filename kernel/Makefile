@@ -1,4 +1,4 @@
-SOURCES := kernel.c $(wildcard libs/*.c) $(wildcard drivers/*.c)
+SOURCES := kernel.c pinit/pinit.c $(wildcard libs/*.c) $(wildcard drivers/*.c)
 OBJECTS := $(SOURCES:.c=.o)
 all: panos.iso
 %.o: %.c

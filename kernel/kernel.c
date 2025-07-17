@@ -1,9 +1,6 @@
-#include "drivers/ps2.h"
-#include "drivers/timers.h"
+#include "pinit/pinit.h"
 void kernel_main() {
   while(1) {
-  PIT();
-  ps2();
+  pinit();
   }
-  while (1);
 }
