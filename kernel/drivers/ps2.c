@@ -3,6 +3,7 @@
 #include "../locales/en_US.h"
 #define KEYBOARD_PORT 0x60
 #define KEYBOARD_PORT_OFF 0x64
+// The translator take a scancode a scan code and turns it into a readable characters
 char translator(uint8_t scancode) {
 	static uint8_t capslock = 0;
 	static uint8_t shift = 0;
@@ -24,14 +25,16 @@ char translator(uint8_t scancode) {
 	if(scancode >= sizeof(ascii_en_US)) {
 	return '\0';
 	}
-	uint8_t uppercase = capslock ^ shift;
-	if(uppercase) {
+	if(capslock) {
+	return ascii_capital_en_US_no_special_characters[scancode];
+	} else if(shift) {
 	return ascii_capital_en_US[scancode];
 	} else {
 	return ascii_en_US[scancode];
 	}
 }
-int ps2_keyboard_scan() {
+// we start by scanning for scancodes (which we will use the translator function to turn it into actually characters)
+int ps2_keyboard() {
 	while(inb(KEYBOARD_PORT_OFF) & 0x02);
 	outb(KEYBOARD_PORT, 0xF0);
 	while(inb(KEYBOARD_PORT_OFF) & 0x02);
@@ -45,12 +48,19 @@ int ps2_keyboard_scan() {
 	outb(KEYBOARD_PORT, 0xF4);
 	while(!(inb(KEYBOARD_PORT_OFF) & 0x01));
 	if(inb(KEYBOARD_PORT) != 0xFA) return 1;
+
 	return 0;
 }
-char ps2_keyboard_input() {
+// The input function calls back the ps2_driver function to get the scancode, then get turns the scancode into a readable characters using the translator function, and then the characters are printed with kputs, and it is all looped using a infinity while loop
+void ps2_keyboard_input() {
+	while(1) {
 	if(inb(KEYBOARD_PORT_OFF) & 0x01) {
 	uint8_t scancode = inb(KEYBOARD_PORT);
-	return translator(scancode);
+	char c =translator(scancode);
+	if(c != '\0') {
+	char string[2] = {c, '\0'};
+	kprintf(string);
 	}
-	return '\0';
+	}
+	}
 }

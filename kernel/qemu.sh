@@ -1,1 +1,1 @@
-qemu-system-i386 -enable-kvm -cdrom panos.iso -cpu host
+qemu-system-x86_64 -enable-kvm -cdrom panos.iso -cpu host

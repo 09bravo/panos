@@ -8,6 +8,7 @@ typedef unsigned int	uint32_t;
 /* The OS/kernel is currently 32bit and not 64bit, i am planing to change this ofc, but for now this is commented */
 //typedef signed long long	int64_t;
 //typedef unsigned long long	uint64_t;
+typedef unsigned long	size_t;
 void outb(uint16_t port, uint8_t val)
 {
     __asm__ volatile ( "outb %b0, %w1" : : "a"(val), "Nd"(port) : "memory");
@@ -27,7 +28,7 @@ void io_wait(void)
 }
 // tracks text postion
 static int pos = 0;
-void kputs(char *str) {
+void kprintf(char *str) {
   volatile char *vga = (volatile char*) 0xB8000;
   /* the default color is white on a black background, if you wish to change it you can change it like this "kputs("\\B blue text!\\W white text!")", in the old versions however, it used to be like this "kputs("\x1bBThis is a blue text! again ! \\Wwhite text! again!")", it used to be like this because I used to type \x1b a lot when I was making Krab but I have decide it was unnecessary, if you was to see more vga color codes please see https://github.com/09bravo/panos/wiki/VGA-Color-codes for more information */
   uint8_t color = 0x0F;
